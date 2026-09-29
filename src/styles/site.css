@@ -1,0 +1,1758 @@
+/* Four in a Row: the film's design system on the page (max-verstappen-motion-graphics/verstappen/src/theme).
+   Original palette, no team, sponsor or series colours. */
+
+:root {
+  --asphalt: #0c0d10;
+  --graphite: #2a2d33;
+  --fog: #8b909a;
+  --chalk: #f2efe9;
+  --ignition: #ff5a1f;
+  --trophy: #f2c14e;
+  --face-display: 'Big Shoulders', 'Arial Narrow', sans-serif;
+  --face-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --snap: cubic-bezier(0.16, 1, 0.3, 1);
+  --whip: cubic-bezier(0.7, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  /* --punch and --punch-ms (the film's slam spring as linear()) are set from main.tsx */
+  --gutter: clamp(1rem, 5vw, 7rem);
+  /* the page fills the screen; only very wide screens get a cap */
+  --measure: 2400px;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  /* type grows a little with the screen: 16px at 1440, about 19px at 2000, capped at 20px */
+  font-size: clamp(100%, 0.45vw + 0.6rem, 125%);
+  background: var(--asphalt);
+  color: var(--chalk);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--face-mono);
+  font-size: 0.98rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--ignition);
+  color: var(--asphalt);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ignition);
+  outline-offset: 3px;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.label {
+  margin: 0;
+  font-family: var(--face-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fog);
+}
+
+.tone-ignition {
+  color: var(--ignition);
+}
+
+.tone-trophy {
+  color: var(--trophy);
+}
+
+.tone-fog {
+  color: var(--fog);
+}
+
+.link {
+  color: inherit;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  text-underline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+/* press feedback on everything pressable */
+.cta,
+.watch,
+.hud button,
+.film-btn,
+.film-acts button,
+.film-big-play {
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out);
+}
+
+.cta:active,
+.watch:active,
+.hud button:active,
+.film-btn:active,
+.film-acts button:active {
+  transform: scale(0.97);
+}
+
+@keyframes slam {
+  from {
+    opacity: 0;
+    transform: translateY(18%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes lamp-on {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lamp-off {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* ---------- Hero: lights out ---------- */
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  align-items: end;
+  gap: clamp(1.5rem, 4vh, 3rem);
+  padding: clamp(4rem, 12vh, 7rem) var(--gutter) clamp(2rem, 6vh, 4rem);
+  overflow: hidden;
+}
+
+.hero-line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hero-line path {
+  fill: none;
+  stroke: var(--ignition);
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 2400ms var(--snap) 200ms forwards;
+}
+
+.gantry {
+  position: relative;
+  justify-self: center;
+  align-self: center;
+  width: min(680px, 84vw);
+}
+
+.gantry-hangers {
+  display: flex;
+  justify-content: space-around;
+  height: clamp(28px, 6vh, 56px);
+}
+
+.gantry-hangers i {
+  width: 2px;
+  background: var(--graphite);
+}
+
+.gantry-beam {
+  height: 3px;
+  background: var(--fog);
+}
+
+.gantry-lights {
+  display: flex;
+  justify-content: space-around;
+}
+
+.housing {
+  --lamp: calc(min(680px, 84vw) / 5 * 0.41);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--lamp) * 0.28);
+  padding: calc(var(--lamp) * 0.28);
+  background: var(--asphalt);
+  border: 2px solid var(--graphite);
+  border-top: none;
+}
+
+.lamp {
+  position: relative;
+  width: var(--lamp);
+  height: var(--lamp);
+  border-radius: 50%;
+  border: 2px solid var(--graphite);
+}
+
+/* lit: five columns one by one, then all out together */
+.lamp::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: var(--ignition);
+  box-shadow: 0 0 calc(var(--lamp) * 0.3) var(--ignition);
+  opacity: 0;
+  animation:
+    lamp-on 1ms linear calc(450ms + var(--c) * 300ms) both,
+    lamp-off 140ms ease-out 2500ms forwards;
+}
+
+.hero-name {
+  position: relative;
+  margin: 0;
+  justify-self: center;
+  font-family: var(--face-display);
+  font-weight: 900;
+  font-size: clamp(3.4rem, 12.5vw, 20rem);
+  line-height: 0.86;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-align: center;
+  animation: slam var(--punch-ms) var(--punch) 2560ms both;
+}
+
+.hero-foot {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  animation: rise 700ms var(--snap) 2850ms both;
+}
+
+.hero-years {
+  margin: 0.2rem 0 0;
+  font-family: var(--face-display);
+  font-weight: 900;
+  font-size: clamp(2.6rem, 5vw, 8rem);
+  line-height: 0.9;
+}
+
+.hero-four {
+  margin: 0.5rem 0 0;
+  font-family: var(--face-display);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 2.4vw, 4rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.cta,
+.watch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1.2rem;
+  border: 2px solid var(--chalk);
+  background: none;
+  font-family: var(--face-display);
+  font-weight: 800;
+  font-size: 1.3rem;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.cta-meta {
+  font-family: var(--face-mono);
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--fog);
+}
+
+.cta-play {
+  width: 0;
+  height: 0;
+  border-left: 0.75rem solid var(--ignition);
+  border-top: 0.45rem solid transparent;
+  border-bottom: 0.45rem solid transparent;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cta,
+  .watch {
+    transition:
+      transform 160ms var(--ease-out),
+      background-color 200ms ease,
+      color 200ms ease;
+  }
+
+  .cta:hover,
+  .watch:hover {
+    background: var(--chalk);
+    color: var(--asphalt);
+  }
+}
+
+/* ---------- HUD ---------- */
+
+.hud {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem var(--gutter);
+  background: color-mix(in srgb, var(--asphalt) 92%, transparent);
+  border-bottom: 1px solid var(--graphite);
+  backdrop-filter: blur(8px);
+}
+
+.hud-left,
+.hud-right {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.hud-name {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--chalk);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.hud-season,
+.hud-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fog);
+  font-variant-numeric: tabular-nums;
+}
+
+.hud-film {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--graphite);
+  background: none;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hud-titles {
+  display: flex;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hud-titles button {
+  display: grid;
+  justify-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem;
+  border: 0;
+  background: none;
+}
+
+.hud-bar {
+  width: 30px;
+  height: 7px;
+  transform: skewX(-20deg);
+  border: 1.5px solid var(--fog);
+  transition:
+    background-color 400ms var(--ease-out),
+    border-color 400ms var(--ease-out);
+}
+
+.hud-titles button[data-won='true'] .hud-bar {
+  background: var(--trophy);
+  border-color: var(--trophy);
+}
+
+.hud-year {
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--fog);
+  font-variant-numeric: tabular-nums;
+}
+
+.hud-titles button[aria-current='true'] .hud-year {
+  color: var(--chalk);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hud-titles button:hover .hud-year,
+  .hud-film:hover {
+    color: var(--chalk);
+  }
+}
+
+/* ---------- The film ---------- */
+
+.film,
+.chapter,
+.block {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: clamp(4rem, 12vh, 8rem) var(--gutter) 0;
+  scroll-margin-top: 3.5rem;
+}
+
+.film-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+}
+
+/* the film never runs taller than the window: its width follows the height left for it */
+.film-stage {
+  width: min(100%, calc((100svh - 13rem) * 16 / 9));
+  margin-inline: auto;
+}
+
+.film-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  /* the film's own asphalt, so any letterboxing disappears into it */
+  background: var(--asphalt);
+  border: 1px solid var(--graphite);
+}
+
+.film-frame video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.film-big-play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: clamp(64px, 9vw, 104px);
+  height: clamp(64px, 9vw, 104px);
+  border-radius: 50%;
+  border: 2px solid var(--chalk);
+  background: color-mix(in srgb, var(--asphalt) 55%, transparent);
+  display: grid;
+  place-items: center;
+}
+
+/* the author display above would otherwise beat the hidden attribute: the button stays up while playing */
+.film-big-play[hidden] {
+  display: none;
+}
+
+.film-big-play span {
+  margin-left: 12%;
+  border-left: 26px solid var(--chalk);
+  border-top: 16px solid transparent;
+  border-bottom: 16px solid transparent;
+}
+
+.film-big-play:active {
+  transform: scale(0.97);
+}
+
+.film-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: 0.8rem;
+}
+
+.film-btn {
+  flex: none;
+  display: grid;
+  place-items: center;
+  min-width: 2.4rem;
+  height: 2.4rem;
+  padding: 0 0.7rem;
+  border: 1px solid var(--graphite);
+  background: none;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.film-btn .icon {
+  width: 0;
+  height: 0;
+  border-left: 11px solid var(--chalk);
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+}
+
+.film-btn[data-state='pause'] .icon {
+  width: 11px;
+  height: 13px;
+  border: 0;
+  border-left: 4px solid var(--chalk);
+  border-right: 4px solid var(--chalk);
+}
+
+.film-full svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: var(--chalk);
+  stroke-width: 1.6;
+  stroke-linecap: square;
+}
+
+/* full screen: the film fills the screen above its bar */
+.film-stage:fullscreen {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2vh 3vw 3vh;
+  background: var(--asphalt);
+}
+
+.film-stage:fullscreen .film-head {
+  display: none;
+}
+
+.film-stage:fullscreen .film-frame {
+  flex: 1;
+  min-height: 0;
+  aspect-ratio: auto;
+  border: 0;
+}
+
+.film-sound[aria-pressed='true'] {
+  border-color: var(--ignition);
+  color: var(--ignition);
+}
+
+.film-acts {
+  flex: 1;
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.film-acts li {
+  flex-basis: 0;
+  min-width: 0;
+}
+
+.film-acts button {
+  width: 100%;
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.3rem 0;
+  border: 0;
+  background: none;
+  text-align: left;
+}
+
+.film-act-track {
+  display: block;
+  height: 4px;
+  background: var(--graphite);
+  overflow: hidden;
+}
+
+.film-act-fill {
+  display: block;
+  height: 100%;
+  background: var(--ignition);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.film-act-label {
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fog);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.film-acts button[aria-current='true'] .film-act-label {
+  color: var(--chalk);
+}
+
+.film-now {
+  display: none;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.film-time {
+  font-size: 0.78rem;
+  color: var(--fog);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Season chapters ---------- */
+
+.year-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+  column-gap: clamp(1rem, 3vw, 2.5rem);
+}
+
+.year-num {
+  margin: 0;
+  font-family: var(--face-display);
+  font-weight: 900;
+  font-size: clamp(6rem, 20vw, 30rem);
+  line-height: 0.82;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.year-card.is-outline .year-num {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--chalk);
+}
+
+.year-card[data-in='true'] .year-num {
+  animation: slam var(--punch-ms) var(--punch) both;
+}
+
+.year-card:not([data-in='true']) .year-num {
+  opacity: 0;
+}
+
+.year-car {
+  width: min(100%, 820px);
+  margin-bottom: 0.6rem;
+}
+
+.year-meta,
+.chapter-title {
+  grid-column: 1 / -1;
+}
+
+.year-meta {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1.2rem;
+  color: var(--chalk);
+}
+
+.chapter-title {
+  margin: 0.4rem 0 0;
+  font-family: var(--face-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 4vw, 6.5rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.year-card[data-in='true'] .year-meta,
+.year-card[data-in='true'] .chapter-title {
+  animation: rise 700ms var(--snap) 250ms both;
+}
+
+.year-card:not([data-in='true']) .year-meta,
+.year-card:not([data-in='true']) .chapter-title {
+  opacity: 0;
+}
+
+/* the car draws on in outline, then its number lands */
+.car {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.car-line {
+  fill: none;
+  stroke: var(--chalk);
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.car-fill {
+  fill: var(--asphalt);
+}
+
+.car-helmet {
+  fill: var(--asphalt);
+  stroke: var(--chalk);
+  opacity: 0;
+}
+
+.car-number {
+  fill: var(--ignition);
+  font-family: var(--face-display);
+  font-weight: 900;
+  font-size: 76px;
+  opacity: 0;
+}
+
+.car[data-draw='true'] .car-line {
+  animation: draw 1500ms var(--snap) 150ms forwards;
+}
+
+.car[data-draw='true'] .car-helmet,
+.car[data-draw='true'] .car-number {
+  animation: rise 500ms var(--snap) 1100ms both;
+}
+
+.chapter-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  margin-top: clamp(2.5rem, 6vh, 4rem);
+  align-items: start;
+}
+
+.chapter-story p {
+  margin: 0 0 1.1rem;
+  max-width: 54ch;
+  color: #c9c6c0;
+}
+
+.chapter-clinch {
+  display: grid;
+  gap: 0.2rem;
+  color: var(--chalk) !important;
+  font-weight: 700;
+}
+
+.watch {
+  margin-top: 0.4rem;
+  padding: 0.7rem 1rem;
+  font-size: 1.05rem;
+}
+
+/* season strip */
+
+.strip-stats {
+  display: flex;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  margin: 0.8rem 0 1.4rem;
+}
+
+.strip-stats div {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.strip-stats dt,
+.totals dt {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fog);
+}
+
+.strip-stats dd,
+.totals dd {
+  margin: 0;
+  font-family: var(--face-display);
+  font-weight: 900;
+  font-size: clamp(3rem, 5vw, 8.5rem);
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+
+.strip-dots,
+.matrix-dots {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.dot-slot {
+  fill: var(--graphite);
+}
+
+.dot-win {
+  fill: var(--ignition);
+}
+
+.dot-podium {
+  fill: none;
+  stroke: var(--chalk);
+  stroke-width: 12;
+}
+
+.dot-finish {
+  fill: var(--fog);
+}
+
+.dot-dnf {
+  stroke: var(--fog);
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.dot {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.strip:not([data-in='true']) .dot,
+.matrix:not([data-in='true']) .dot {
+  opacity: 0;
+}
+
+.strip[data-in='true'] .dot {
+  animation: pop var(--punch-ms) var(--punch) calc(var(--i) * 55ms) both;
+}
+
+.matrix[data-in='true'] .dot {
+  animation: pop var(--punch-ms) var(--punch) calc(var(--i) * 18ms) both;
+}
+
+.bracket {
+  color: var(--ignition);
+}
+
+.bracket.tone-fog {
+  color: var(--fog);
+}
+
+.bracket-line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 8;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.bracket-label {
+  fill: currentColor;
+  font-family: var(--face-mono);
+  font-weight: 700;
+  font-size: 46px;
+  letter-spacing: 0.08em;
+  opacity: 0;
+}
+
+.strip[data-done='true'] .bracket-line {
+  animation: draw 900ms var(--snap) forwards;
+}
+
+.strip[data-done='true'] .bracket-label {
+  animation: rise 500ms var(--snap) 450ms both;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fog);
+}
+
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.legend i {
+  display: inline-grid;
+  place-items: center;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  font-style: normal;
+}
+
+.lg-win {
+  background: var(--ignition);
+}
+
+.lg-podium {
+  border: 2px solid var(--chalk);
+}
+
+.lg-finish {
+  transform: scale(0.45);
+  background: var(--fog);
+}
+
+.lg-dnf {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+/* extras */
+
+.extras {
+  margin-top: clamp(3rem, 9vh, 6rem);
+}
+
+.extras-2021 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: end;
+}
+
+.extras-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 5vh, 3.5rem) 2rem;
+}
+
+.headline-text {
+  margin: 0;
+  font-family: var(--face-display);
+  font-weight: 900;
+  font-size: clamp(2.2rem, 4.6vw, 8rem);
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.headline-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.04em;
+}
+
+.headline-line > span {
+  display: inline-block;
+  transform: translateY(105%);
+}
+
+.headline[data-in='true'] .headline-line > span {
+  transform: none;
+  transition: transform 750ms var(--snap) calc(var(--i) * 90ms);
+}
+
+.headline-caption {
+  margin-top: 0.9rem;
+}
+
+.slam-stat {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+.slam-stat-value {
+  font-family: var(--face-display);
+  font-weight: 900;
+  font-size: clamp(3.6rem, 7vw, 12rem);
+  line-height: 0.85;
+  font-variant-numeric: tabular-nums;
+}
+
+.extras .slam-stat:first-child .slam-stat-value {
+  color: var(--ignition);
+}
+
+.slam-stat-label {
+  display: grid;
+  gap: 0.3rem;
+  justify-items: start;
+  padding-top: 0.3rem;
+  font-family: var(--face-display);
+  font-weight: 800;
+  font-size: 1.4rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.slam-stat-label small {
+  font-family: var(--face-mono);
+  font-weight: 500;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  color: var(--fog);
+}
+
+.slam-stat:not([data-in='true']) {
+  opacity: 0;
+}
+
+.slam-stat[data-in='true'] {
+  animation: slam var(--punch-ms) var(--punch) both;
+}
+
+.record-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.12rem 0.45rem 0.18rem;
+  border: 2px solid currentColor;
+  font-family: var(--face-mono);
+  font-weight: 700;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ignition);
+}
+
+.record-tag.tone-trophy {
+  color: var(--trophy);
+}
+
+/* 2024: from 17th */
+
+.climb {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(140px, 18vw);
+  gap: 2rem;
+  align-items: center;
+}
+
+.climb-from,
+.climb-to {
+  margin: 0;
+  font-family: var(--face-display);
+  font-weight: 900;
+  line-height: 0.86;
+  text-transform: uppercase;
+}
+
+.climb-from {
+  margin-top: 0.6rem;
+  font-size: clamp(2.6rem, 4.6vw, 7rem);
+}
+
+.climb-to {
+  font-size: clamp(4.6rem, 11vw, 16rem);
+  transform-origin: left bottom;
+}
+
+.climb-note {
+  max-width: 48ch;
+  margin: 1rem 0 0;
+  color: #c9c6c0;
+}
+
+.climb:not([data-in='true']) .climb-to {
+  opacity: 0;
+}
+
+.climb[data-in='true'] .climb-to {
+  animation: slam var(--punch-ms) var(--punch) 1500ms both;
+}
+
+.climb-ladder {
+  position: relative;
+}
+
+.climb-ladder ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 2px;
+}
+
+.climb-ladder li {
+  padding-left: 3.2rem;
+  border-bottom: 1px solid var(--graphite);
+  font-size: 0.66rem;
+  line-height: 1.55;
+  letter-spacing: 0.06em;
+  color: var(--fog);
+}
+
+.climb-ladder li.is-first {
+  color: var(--ignition);
+  font-weight: 700;
+}
+
+.climb-car {
+  position: absolute;
+  left: 0.6rem;
+  top: 0;
+  width: 1.9rem;
+  height: calc(100% / 17 - 2px);
+  background: var(--ignition);
+  clip-path: polygon(0 50%, 22% 0, 100% 0, 100% 100%, 22% 100%);
+  transform: translateY(1600%);
+}
+
+.climb[data-in='true'] .climb-car {
+  transform: none;
+  transition: transform 1500ms var(--whip) 200ms;
+}
+
+/* standings */
+
+.duel {
+  margin-top: clamp(3rem, 9vh, 6rem);
+}
+
+.duel-rows {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+.duel-row {
+  display: grid;
+  grid-template-columns: 2.4rem minmax(6rem, 10rem) minmax(0, 1fr) 5.5rem;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pos {
+  display: grid;
+  place-items: center;
+  height: 1.9rem;
+  background: var(--graphite);
+  font-family: var(--face-display);
+  font-weight: 900;
+  font-size: 1.15rem;
+}
+
+.pos-1 {
+  background: var(--ignition);
+  color: var(--asphalt);
+}
+
+.duel-name {
+  font-family: var(--face-display);
+  font-weight: 800;
+  font-size: 1.6rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.duel-track {
+  position: relative;
+  height: 1.3rem;
+}
+
+.duel-bar {
+  display: flex;
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.duel[data-in='true'] .duel-bar {
+  transform: none;
+  transition: transform 1300ms var(--snap);
+}
+
+.duel-bar-rest {
+  background: var(--chalk);
+}
+
+.duel-bar-lead {
+  background: var(--ignition);
+}
+
+.duel-mark {
+  position: absolute;
+  top: -1.6rem;
+  bottom: -0.4rem;
+  border-left: 2px solid var(--fog);
+  opacity: 0;
+}
+
+.duel-mark span {
+  position: absolute;
+  right: 0.5rem;
+  top: 0;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--fog);
+}
+
+.duel[data-in='true'] .duel-mark {
+  animation: rise 500ms var(--snap) 900ms both;
+}
+
+.duel-points {
+  font-family: var(--face-display);
+  font-weight: 900;
+  font-size: 2rem;
+  line-height: 1;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.duel-headline {
+  margin-top: 1.4rem;
+}
+
+.slam {
+  margin: 0;
+  font-family: var(--face-display);
+  font-weight: 900;
+  font-size: clamp(2.6rem, 5.6vw, 9rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.duel-record {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0.8rem 0 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.duel:not([data-in='true']) .duel-headline {
+  opacity: 0;
+}
+
+.duel[data-in='true'] .duel-headline {
+  animation: slam var(--punch-ms) var(--punch) 1250ms both;
+}
+
+/* the decisive moment */
+
+.moment {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+  margin-top: clamp(3rem, 9vh, 6rem);
+}
+
+.pitboard {
+  padding: 0.6rem 1.6rem 0.9rem;
+  border: 6px solid var(--chalk);
+  background: var(--asphalt);
+}
+
+.pitboard:not([data-in='true']) {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.pitboard[data-in='true'] {
+  transition:
+    transform 600ms var(--snap),
+    opacity 400ms var(--snap);
+}
+
+.pitboard-row {
+  margin: 0;
+  padding: 0.5rem 0 0.35rem;
+  font-family: var(--face-display);
+  font-weight: 900;
+  font-size: clamp(1.6rem, 2.6vw, 3.8rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.pitboard-row + .pitboard-row {
+  border-top: 2px solid var(--graphite);
+}
+
+.pitboard-row.is-small {
+  font-size: clamp(1.1rem, 1.6vw, 2.4rem);
+}
+
+.pitboard-row > span {
+  display: inline-block;
+  clip-path: inset(0 0 100% 0);
+  transform: translateY(40%);
+}
+
+.pitboard[data-in='true'] .pitboard-row > span {
+  clip-path: inset(0);
+  transform: none;
+  transition:
+    clip-path 500ms var(--snap) calc(250ms + var(--i) * 140ms),
+    transform 500ms var(--snap) calc(250ms + var(--i) * 140ms);
+}
+
+.moment-name {
+  margin: 0.3rem 0 0.8rem;
+  font-family: var(--face-display);
+  font-weight: 800;
+  font-size: 2rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.moment-beats {
+  margin: 0;
+  padding-left: 1.3rem;
+  display: grid;
+  gap: 0.5rem;
+  color: #c9c6c0;
+}
+
+/* chequered band: fills from the middle outwards */
+
+.chequer {
+  height: 40px;
+  margin-top: clamp(4rem, 12vh, 7rem);
+  border-top: 2px solid var(--chalk);
+  border-bottom: 2px solid var(--chalk);
+  background: repeating-conic-gradient(var(--chalk) 0 25%, var(--asphalt) 0 50%) 0 0 / 36px 36px;
+  clip-path: inset(0 50% 0 50%);
+}
+
+.chequer[data-in='true'] {
+  clip-path: inset(0);
+  transition: clip-path 1000ms var(--whip);
+}
+
+/* ---------- Numbers, records, cars, finale ---------- */
+
+.matrix {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+}
+
+.matrix-row {
+  display: grid;
+  grid-template-columns: 3.2rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.totals {
+  display: flex;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  margin: 2rem 0 0;
+}
+
+.totals div {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.totals dd {
+  font-size: clamp(3.4rem, 7vw, 11rem);
+}
+
+.season-table-wrap {
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--graphite);
+}
+
+.season-table-wrap summary {
+  padding: 1rem 0;
+  cursor: pointer;
+  color: var(--chalk);
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.season-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.season-table th,
+.season-table td {
+  padding: 0.7rem 0.8rem;
+  text-align: right;
+  border-bottom: 1px solid var(--graphite);
+  white-space: nowrap;
+}
+
+.season-table th:first-child,
+.season-table td:nth-child(2) {
+  text-align: left;
+}
+
+.season-table thead th {
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--fog);
+}
+
+.season-table tfoot {
+  font-weight: 700;
+}
+
+.of {
+  color: var(--fog);
+  font-weight: 400;
+}
+
+.block-note {
+  margin: 1.4rem 0 0;
+  max-width: 78ch;
+  font-size: 0.8rem;
+  color: var(--fog);
+}
+
+.records {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1px;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+  background: var(--graphite);
+  border: 1px solid var(--graphite);
+}
+
+.record {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 0.45rem;
+  padding: 1.3rem;
+  background: var(--asphalt);
+}
+
+.record-value {
+  font-family: var(--face-display);
+  font-weight: 900;
+  font-size: 2rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.record-before {
+  font-size: 0.74rem;
+  color: var(--fog);
+}
+
+.records:not([data-in='true']) .record {
+  opacity: 0;
+}
+
+.records[data-in='true'] .record {
+  animation: rise 600ms var(--snap) calc(var(--i) * 60ms) both;
+}
+
+.cars {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.car-card {
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+}
+
+.car-card .car {
+  margin-bottom: 1rem;
+}
+
+.car-name {
+  margin: 0;
+  font-family: var(--face-display);
+  font-weight: 900;
+  font-size: 2.6rem;
+  line-height: 0.9;
+}
+
+.car-note {
+  margin: 0.3rem 0 0;
+  font-size: 0.86rem;
+  color: #c9c6c0;
+}
+
+.finale {
+  text-align: center;
+  padding-top: clamp(5rem, 16vh, 10rem);
+}
+
+.trophies {
+  display: flex;
+  justify-content: center;
+  gap: clamp(0.6rem, 2vw, 1.2rem);
+  margin-bottom: 1.4rem;
+}
+
+.trophy {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  font-family: var(--face-mono);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--trophy);
+  font-variant-numeric: tabular-nums;
+}
+
+.trophy i {
+  width: clamp(56px, 9vw, 96px);
+  height: clamp(16px, 2.2vw, 24px);
+  background: var(--trophy);
+  transform: skewX(-20deg);
+}
+
+.trophies:not([data-in='true']) .trophy {
+  opacity: 0;
+}
+
+.trophies[data-in='true'] .trophy {
+  animation: slam var(--punch-ms) var(--punch) calc(var(--i) * 140ms) both;
+}
+
+.finale .headline-text {
+  font-size: clamp(2.8rem, 7vw, 11rem);
+}
+
+.finale-note {
+  max-width: 46ch;
+  margin: 1.2rem auto 0;
+  color: #c9c6c0;
+}
+
+.afterword {
+  max-width: 52ch;
+  margin: 3rem auto 0;
+  padding-top: 2rem;
+  border-top: 1px solid var(--graphite);
+  font-size: 0.86rem;
+  color: var(--fog);
+}
+
+.footer {
+  margin-top: clamp(5rem, 14vh, 9rem);
+  padding: 3rem var(--gutter);
+  border-top: 1px solid var(--graphite);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 2.5rem;
+  max-width: var(--measure);
+  margin: 0 auto;
+}
+
+.footer p {
+  margin: 0 0 0.9rem;
+  max-width: 64ch;
+  font-size: 0.8rem;
+  color: var(--fog);
+}
+
+.footer-title {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--chalk) !important;
+}
+
+.footer-list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8rem;
+}
+
+/* ---------- Reduced motion: every sequence rests in its final state; nothing moves ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .lamp::after {
+    animation: none !important;
+    opacity: 0;
+  }
+}
+
+/* ---------- Narrow screens ---------- */
+
+@media (max-width: 899px) {
+  .chapter-grid,
+  .moment,
+  .extras-2021,
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cars {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .extras-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .year-card {
+    grid-template-columns: 1fr;
+  }
+
+  .year-car {
+    width: min(75%, 360px);
+    margin-top: 0.8rem;
+  }
+
+  .duel-row {
+    grid-template-columns: 2rem minmax(0, 1fr) 4.2rem;
+  }
+
+  .duel-name {
+    font-size: 1.2rem;
+  }
+
+  .duel-track {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .duel-points {
+    grid-column: 3;
+    grid-row: 1;
+    font-size: 1.6rem;
+  }
+
+  .climb {
+    grid-template-columns: minmax(0, 1fr) 110px;
+    gap: 1rem;
+  }
+
+  .climb-ladder li {
+    padding-left: 2.6rem;
+  }
+
+  .film-act-label {
+    display: none;
+  }
+
+  .film-now {
+    display: block;
+  }
+
+  /* no room for the marker's label beside the points: the record line below says it */
+  .duel-mark {
+    top: -0.3rem;
+    bottom: -0.3rem;
+  }
+
+  .duel-mark span {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .hud-label,
+  .hud-season,
+  .hud-year {
+    display: none;
+  }
+
+  .hud-bar {
+    width: 22px;
+  }
+
+  .extras-grid,
+  .cars {
+    grid-template-columns: 1fr;
+  }
+
+  .film-time {
+    display: none;
+  }
+
+  .totals {
+    flex-wrap: wrap;
+  }
+}

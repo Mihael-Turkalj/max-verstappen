@@ -1,0 +1,8 @@
+node_modules
+dist
+.playwright-mcp
+*.log
+.env*
+
+# the source film as delivered (a faststart copy lives in public/motion)
+mp4 video - motion graphics/

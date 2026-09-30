@@ -1,5 +1,7 @@
 # Verstappen: Four in a Row
 
+![The start lights go out, the name slams in, and the page scrolls into the seasons](media/preview.webp)
+
 An unofficial fan showcase of Max Verstappen's four straight Formula 1 world titles with Red Bull, 2021–2024. The page is built on top of a 2:51 motion-graphics film, "Four in a Row", made in Remotion. The film plays as the centrepiece, and the rest of the page rebuilds its graphic language as live web motion.
 
 **Live site:** https://mihael-turkalj.github.io/max-verstappen/

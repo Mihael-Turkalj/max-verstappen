@@ -304,7 +304,7 @@ export function Film() {
               const end = i + 1 < acts.length ? acts[i + 1].start : film.duration
               return (
                 <li key={a.id} style={{ flexGrow: end - a.start }}>
-                  <button type="button" onClick={() => seek(a.start)} aria-current={act.id === a.id ? 'true' : undefined}>
+                  <button type="button" onClick={() => seek(a.start)} aria-current={act.id === a.id ? 'true' : undefined} aria-label={`Play from ${a.label}`}>
                     <span className="film-act-track">
                       <span className="film-act-fill" ref={(el) => void (fills.current[i] = el)} />
                     </span>

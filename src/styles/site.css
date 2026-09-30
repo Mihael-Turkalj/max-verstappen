@@ -118,9 +118,11 @@ button {
   transform: scale(0.97);
 }
 
+/* the intro starts from 0.001, not 0: it still looks invisible, but the browser counts the name as painted,
+   so the page's largest paint is recorded at once instead of never */
 @keyframes slam {
   from {
-    opacity: 0;
+    opacity: 0.001;
     transform: translateY(18%) scale(0.96);
   }
   to {
@@ -131,7 +133,7 @@ button {
 
 @keyframes rise {
   from {
-    opacity: 0;
+    opacity: 0.001;
     transform: translateY(24px);
   }
   to {
@@ -1640,6 +1642,50 @@ button {
   font-size: 0.8rem;
 }
 
+/* the rest of the lab, so one visit leads to the next */
+.footer-lab {
+  max-width: var(--measure);
+  margin: 2.5rem auto 0;
+  padding-top: 2rem;
+  border-top: 1px solid var(--graphite);
+}
+
+.footer-lab-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-lab-list a {
+  font-family: var(--face-display);
+  font-weight: 800;
+  font-size: 1.15rem;
+  text-transform: uppercase;
+  color: var(--chalk);
+}
+
+.footer-lab-list span {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  color: var(--fog);
+}
+
+.footer-lab-all {
+  display: inline-block;
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 899px) {
+  .footer-lab-list {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---------- Reduced motion: every sequence rests in its final state; nothing moves ---------- */
 
 @media (prefers-reduced-motion: reduce) {
@@ -1719,6 +1765,21 @@ button {
 
   .film-now {
     display: block;
+  }
+
+  /* without labels the acts get a row of their own, so each one is wide and tall enough to tap */
+  .film-bar {
+    flex-wrap: wrap;
+  }
+
+  .film-acts {
+    order: 10;
+    flex-basis: 100%;
+  }
+
+  .film-acts button {
+    min-height: 24px;
+    align-content: center;
   }
 
   /* no room for the marker's label beside the points: the record line below says it */

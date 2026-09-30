@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { allWork, lab } from '../data/lab'
 import { racesOf, type Year } from '../data/races'
 import { afterword, career2024, cars, records, seasons, sources, totals } from '../data/run'
 import { formatNumber, useCountUp, useInView, usePrefersReducedMotion } from '../lib/motion'
@@ -222,6 +223,27 @@ export function Footer() {
           </ul>
         </div>
       </div>
+      {/* the rest of the lab, so one visit leads to the next */}
+      <nav className="footer-lab" aria-labelledby="lab-title">
+        <h2 id="lab-title" className="label">
+          More from the lab
+        </h2>
+        <ul className="footer-lab-list">
+          {lab
+            .filter((l) => l.id !== 'max-verstappen')
+            .map((l) => (
+              <li key={l.id}>
+                <a href={l.href} className="link">
+                  {l.title}
+                </a>
+                <span>{l.what}</span>
+              </li>
+            ))}
+        </ul>
+        <a href={allWork} className="link footer-lab-all">
+          All work by Mihael Turkalj →
+        </a>
+      </nav>
     </footer>
   )
 }
